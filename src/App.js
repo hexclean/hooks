@@ -4,14 +4,9 @@ import "./App.css";
 function App() {
   const [number, setNumber] = useState(0);
 
-  const increaseHandler = () => {
-    setNumber(prevState => prevState + 1);
-    console.log(number);
-  };
-  const decreaseHandler = () => {
-    setNumber(prevState => prevState - 1);
-    console.log(number);
-  };
+  const increaseHandler = () => setNumber(prevState => prevState + 1);
+
+  const decreaseHandler = () => setNumber(prevState => prevState - 1);
 
   return (
     <div className="counter-container">
