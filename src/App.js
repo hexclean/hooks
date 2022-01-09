@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 
 function App() {
   const [number, setNumber] = useState(0);
+  const [input, setInput] = useState("");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef();
 
   const increaseHandler = () => setNumber(prevState => prevState + 1);
 
@@ -26,6 +28,17 @@ function App() {
     }
   }, []);
 
+  const changeInputValue = e => setInput(e.target.value);
+
+  const filteredItems = [
+    ...users.filter(item => item.name.toLowerCase().includes(input)),
+  ];
+
+  const clearHandler = () => {
+    setInput("");
+    inputRef.current.focus();
+  };
+
   return (
     <div className="counter-container">
       <h1>Counter</h1>
@@ -42,11 +55,20 @@ function App() {
           </button>
         </div>
       </div>
+      <input
+        ref={inputRef}
+        value={input}
+        type="text"
+        onChange={changeInputValue}
+      />
+      <button onClick={clearHandler} type="button">
+        Clear
+      </button>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <React.Fragment>
-          {users.map(user => (
+          {filteredItems.map(user => (
             <p key={user.id}>{user.name}</p>
           ))}
         </React.Fragment>
