@@ -1,12 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
   const [number, setNumber] = useState(0);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const increaseHandler = () => setNumber(prevState => prevState + 1);
 
   const decreaseHandler = () => setNumber(prevState => prevState - 1);
+
+  useEffect(() => {
+    try {
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then(response => {
+          setLoading(true);
+          return response.json();
+        })
+        .then(json => {
+          setUsers(json);
+          setLoading(false);
+        });
+    } catch (error) {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <div className="counter-container">
@@ -24,6 +42,15 @@ function App() {
           </button>
         </div>
       </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <React.Fragment>
+          {users.map(user => (
+            <p key={user.id}>{user.name}</p>
+          ))}
+        </React.Fragment>
+      )}
     </div>
   );
 }
